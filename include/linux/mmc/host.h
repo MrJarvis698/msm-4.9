@@ -298,9 +298,7 @@ struct mmc_cmdq_context_info {
 #define	CMDQ_STATE_CQ_DISABLE 3
 #define	CMDQ_STATE_REQ_TIMED_OUT 4
 	wait_queue_head_t	queue_empty_wq;
-	wait_queue_head_t	wait;
 	int active_small_sector_read_reqs;
-	struct rw_semaphore err_rwsem;
 };
 
 /**

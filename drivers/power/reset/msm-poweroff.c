@@ -102,6 +102,8 @@ struct reset_attribute {
 	static struct reset_attribute reset_attr_##_name = \
 			__ATTR(_name, _mode, _show, _store)
 
+static int dload_set(const char *val, struct kernel_param *kp);
+int download_mode = 0;
 module_param_call(download_mode, dload_set, param_get_int,
 			&download_mode, 0644);
 

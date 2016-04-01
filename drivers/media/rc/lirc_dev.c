@@ -308,6 +308,26 @@ static int lirc_allocate_driver(struct lirc_driver *d)
 	/* some safety check 8-) */
 	d->name[sizeof(d->name)-1] = '\0';
 
+	bytes_in_key = (d->code_length + 7) / 8;
+	buffer_size = d->buffer_size ? d->buffer_size : BUFLEN / bytes_in_key;
+	chunk_size  = d->chunk_size  ? d->chunk_size  : bytes_in_key;
+
+	if (d->rbuf) {
+		ir->buf = d->rbuf;
+	} else {
+		ir->buf = kmalloc(sizeof(struct lirc_buffer), GFP_KERNEL);
+		if (!ir->buf) {
+			err = -ENOMEM;
+			goto out_lock;
+		}
+		err = lirc_buffer_init(ir->buf, chunk_size, buffer_size);
+		if (err) {
+			kfree(ir->buf);
+			goto out_lock;
+		}
+	}
+	ir->chunk_size = ir->buf->chunk_size;
+
 	if (d->features == 0)
 		d->features = LIRC_CAN_REC_LIRCCODE;
 

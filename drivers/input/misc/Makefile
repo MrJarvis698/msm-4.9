@@ -20,6 +20,8 @@ obj-$(CONFIG_INPUT_ATLAS_BTNS)		+= atlas_btns.o
 obj-$(CONFIG_INPUT_ATMEL_CAPTOUCH)	+= atmel_captouch.o
 obj-$(CONFIG_INPUT_BFIN_ROTARY)		+= bfin_rotary.o
 obj-$(CONFIG_INPUT_BMA150)		+= bma150.o
+obj-$(CONFIG_INPUT_FPC1020)		+= fpc1020_tee.o
+obj-$(CONFIG_FINGERPRINT_GOODIX_GF318M) += goodix/
 obj-$(CONFIG_INPUT_CM109)		+= cm109.o
 obj-$(CONFIG_INPUT_CMA3000)		+= cma3000_d0x.o
 obj-$(CONFIG_INPUT_CMA3000_I2C)		+= cma3000_d0x_i2c.o
@@ -82,6 +84,30 @@ obj-$(CONFIG_INPUT_WISTRON_BTNS)	+= wistron_btns.o
 obj-$(CONFIG_INPUT_WM831X_ON)		+= wm831x-on.o
 obj-$(CONFIG_INPUT_XEN_KBDDEV_FRONTEND)	+= xen-kbdfront.o
 obj-$(CONFIG_INPUT_YEALINK)		+= yealink.o
-obj-$(CONFIG_INPUT_IDEAPAD_SLIDEBAR)	+= ideapad_slidebar.o
-obj-$(CONFIG_INPUT_PIXART_OTS_PAT9125_SWITCH)	+= ots_pat9125/
-obj-$(CONFIG_STMVL53L0X)	+= vl53l0x/
+obj-$(CONFIG_BMP18X)			+= bmp18x-core.o
+obj-$(CONFIG_BMP18X_I2C)		+= bmp18x-i2c.o
+obj-$(CONFIG_SENSORS_MMC3416X)		+= mmc3416x.o
+obj-$(CONFIG_SENSORS_MMA8X5X)	  	+= mma8x5x.o
+obj-$(CONFIG_SENSORS_STK3X1X)		+= stk3x1x.o
+obj-$(CONFIG_SENSORS_CAPELLA_CM36283)	+= cm36283.o
+obj-$(CONFIG_SENSORS_MPU6050)		+= mpu6050.o
+obj-$(CONFIG_SENSORS_AKM8963)		+= akm8963.o
+obj-$(CONFIG_SENSORS_AKM09911)		+= akm09911.o
+obj-$(CONFIG_SENSORS_LIS3DH)		+= lis3dh_acc.o
+obj-$(CONFIG_SENSORS_AP3426)		+= ap3426.o
+obj-$(CONFIG_SENSORS_BMA2X2)	+= bstclass.o
+
+obj-$(CONFIG_SENSORS_BMA2X2)	+= bma2x2.o
+obj-$(CONFIG_HALL)		+= hall.o
+obj-$(CONFIG_SENSORS_LTR553)	+= ltr553.o
+
+ifeq ($(CONFIG_SENSORS_BMA2X2_ENABLE_INT1),y)
+	EXTRA_CFLAGS += -DBMA2X2_ENABLE_INT1
+endif
+
+ifeq ($(CONFIG_BOSCH_BMA2X2_ENABLE_INT2),y)
+	EXTRA_CFLAGS += -DBMA2X2_ENABLE_INT2
+endif
+
+obj-$(CONFIG_SENSORS_MC3430)	+= mc3xxx.o
+obj-$(CONFIG_SENSORS_ISL29044A)	+= isl29044a.o

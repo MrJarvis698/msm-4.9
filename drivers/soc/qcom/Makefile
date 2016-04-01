@@ -97,14 +97,14 @@ obj-$(CONFIG_QTI_RPM_STATS_LOG) += rpm_stats.o
 ifdef CONFIG_MSM_RPM_SMD
 	obj-$(CONFIG_QTI_RPM_STATS_LOG) += rpm_master_stat.o
 endif
-ifdef CONFIG_QTI_RPMH_API
-	obj-$(CONFIG_QTI_RPM_STATS_LOG) += rpmh_master_stat.o
-endif
-obj-$(CONFIG_QCOM_SMCINVOKE) += smcinvoke.o
-obj-$(CONFIG_QMP_DEBUGFS_CLIENT) += qmp-debugfs-client.o
-obj-$(CONFIG_MSM_REMOTEQDSS) += remoteqdss.o
-obj-$(CONFIG_QSEE_IPC_IRQ_BRIDGE) += qsee_ipc_irq_bridge.o
-obj-$(CONFIG_QCOM_QDSS_BRIDGE) += qdss_bridge.o
-obj-$(CONFIG_MSM_BAM_DMUX) += bam_dmux.o
-obj-$(CONFIG_WCNSS_CORE) += wcnss/
-obj-$(CONFIG_BIG_CLUSTER_MIN_FREQ_ADJUST) += big_cluster_min_freq_adjust.o
+
+obj-$(CONFIG_MSM_SHARED_HEAP_ACCESS) += shared_memory.o
+obj-$(CONFIG_MSM_SYSTEM_HEALTH_MONITOR) += system_health_monitor_v01.o
+obj-$(CONFIG_MSM_SYSTEM_HEALTH_MONITOR) += system_health_monitor.o
+obj-$(CONFIG_MSM_RTB) += msm_rtb-hotplug.o
+obj-$(CONFIG_QCOM_EARLY_RANDOM)	+= early_random.o
+obj-$(CONFIG_MSM_PACMAN)        += msm_pacman.o
+obj-$(CONFIG_MSM_TEST_PACMAN)        += msm_test_pacman.o
+obj-$(CONFIG_TRACER_PKT) += tracer_pkt.o
+obj-$(CONFIG_MSM_VSENS) += vsens.o
+obj-$(CONFIG_SERIAL_NUM) += serial_num.o

@@ -1,4 +1,5 @@
 /* Copyright (c) 2012-2017, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2016 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -2107,10 +2108,10 @@ static int qpnp_parse_dt_config(struct platform_device *pdev,
 		rc = -EINVAL;
 		goto out;
 	}
+	_pwm_change_mode(chip, enable);
 
-	chip->pwm_mode = mode;
-	_pwm_change_mode(chip, mode);
-	_pwm_enable(chip);
+	if (chip->dtest_line != 1)
+		_pwm_enable(chip);
 
 read_opt_props:
 	/* Initialize optional config parameters from DT if provided */

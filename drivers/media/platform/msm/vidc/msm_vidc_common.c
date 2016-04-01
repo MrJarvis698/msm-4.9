@@ -3235,8 +3235,7 @@ static int msm_vidc_load_resources(int flipped_state,
 		msm_comm_get_load(core, MSM_VIDC_DECODER, quirks) +
 		msm_comm_get_load(core, MSM_VIDC_ENCODER, quirks);
 
-	max_load_adj = core->resources.max_load +
-		inst->capability.mbs_per_frame.max;
+	max_load_adj = core->resources.max_load + inst->capability.mbs_per_frame.max;
 
 	if (num_mbs_per_sec > max_load_adj) {
 		dprintk(VIDC_ERR, "HW is overloaded, needed: %d max: %d\n",
@@ -5509,7 +5508,7 @@ static int msm_vidc_load_supported(struct msm_vidc_inst *inst)
 		LOAD_CALC_IGNORE_NON_REALTIME_LOAD;
 
 	if (inst->state == MSM_VIDC_OPEN_DONE) {
-		max_load_adj = inst->core->resources.max_load;
+		max_load_adj = inst->core->resources.max_load + inst->capability.mbs_per_frame.max;
 		num_mbs_per_sec = msm_comm_get_load(inst->core,
 					MSM_VIDC_DECODER, quirks);
 		num_mbs_per_sec += msm_comm_get_load(inst->core,

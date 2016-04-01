@@ -746,27 +746,28 @@ EXPORT_SYMBOL_GPL(rc_open);
 static int ir_open(struct input_dev *idev)
 {
 	struct rc_dev *rdev = input_get_drvdata(idev);
+	int rc = 0;
 
-	return rc_open(rdev);
-}
+	mutex_lock(&rdev->lock);
+	if (!rdev->open_count++)
+		rc = rdev->open(rdev);
+	if (rc < 0)
+		rdev->open_count--;
+	mutex_unlock(&rdev->lock);
 
-void rc_close(struct rc_dev *rdev)
-{
-	if (rdev) {
-		mutex_lock(&rdev->lock);
-
-		if (!--rdev->users && rdev->close != NULL)
-			rdev->close(rdev);
-
-		mutex_unlock(&rdev->lock);
-	}
+	return rc;
 }
 EXPORT_SYMBOL_GPL(rc_close);
 
 static void ir_close(struct input_dev *idev)
 {
 	struct rc_dev *rdev = input_get_drvdata(idev);
-	rc_close(rdev);
+	 if (rdev) {
+		mutex_lock(&rdev->lock);
+		if (!--rdev->open_count)
+			rdev->close(rdev);
+		mutex_unlock(&rdev->lock);
+	}
 }
 
 /* class for /sys/class/rc */

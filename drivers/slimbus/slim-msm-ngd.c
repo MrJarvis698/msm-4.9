@@ -2070,10 +2070,11 @@ static int ngd_slim_runtime_suspend(struct device *device)
 
 	mutex_lock(&dev->tx_lock);
 	ret = ngd_slim_power_down(dev);
-	if (ret && ret != -EBUSY)
+
+	 if (ret && ret != -EBUSY)
 		SLIM_INFO(dev, "slim resource not idle:%d\n", ret);
-	if (!ret || ret == -ETIMEDOUT)
-		dev->state = MSM_CTRL_ASLEEP;
+	 if (!ret || ret == -ETIMEDOUT)
+			dev->state = MSM_CTRL_ASLEEP;
 	mutex_unlock(&dev->tx_lock);
 	SLIM_INFO(dev, "Slim runtime suspend: ret %d\n", ret);
 	return ret;

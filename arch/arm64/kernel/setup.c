@@ -67,7 +67,12 @@
 #include <asm/mmu_context.h>
 #include <asm/system_misc.h>
 
-phys_addr_t __fdt_pointer __initdata;
+int is_tp_driver_loaded;
+unsigned int processor_id;
+EXPORT_SYMBOL(processor_id);
+
+unsigned long elf_hwcap __read_mostly;
+EXPORT_SYMBOL_GPL(elf_hwcap);
 
 unsigned int boot_reason;
 EXPORT_SYMBOL(boot_reason);

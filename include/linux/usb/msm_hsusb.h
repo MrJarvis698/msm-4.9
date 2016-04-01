@@ -113,6 +113,155 @@ enum usb_id_state {
 	USB_ID_FLOAT,
 };
 
+/**
+ * struct msm_otg_platform_data - platform device data
+ *              for msm_otg driver.
+ * @phy_init_seq: PHY configuration sequence. val, reg pairs
+ *              terminated by -1.
+ * @vbus_power: VBUS power on/off routine.It should return result
+ *		as success(zero value) or failure(non-zero value).
+ * @power_budget: VBUS power budget in mA (0 will be treated as 500mA).
+ * @mode: Supported mode (OTG/peripheral/host).
+ * @otg_control: OTG switch controlled by user/Id pin
+ * @default_mode: Default operational mode. Applicable only if
+ *              OTG switch is controller by user.
+ * @pmic_id_irq: IRQ number assigned for PMIC USB ID line.
+ * @mpm_otgsessvld_int: MPM wakeup pin assigned for OTG SESSVLD
+ *              interrupt. Used when .otg_control == OTG_PHY_CONTROL.
+ * @mpm_dpshv_int: MPM wakeup pin assigned for DP SHV interrupt.
+ *		Used during host bus suspend.
+ * @mpm_dmshv_int: MPM wakeup pin assigned for DM SHV interrupt.
+ *		Used during host bus suspend.
+ * @mhl_enable: indicates MHL connector or not.
+ * @disable_reset_on_disconnect: perform USB PHY and LINK reset
+ *              on USB cable disconnection.
+ * @pnoc_errata_fix: workaround needed for PNOC hardware bug that
+ *              affects USB performance.
+ * @enable_lpm_on_suspend: Enable the USB core to go into Low
+ *              Power Mode, when USB bus is suspended but cable
+ *              is connected.
+ * @core_clk_always_on_workaround: Don't disable core_clk when
+ *              USB enters LPM.
+ * @delay_lpm_on_disconnect: Use a delay before entering LPM
+ *              upon USB cable disconnection.
+ * @enable_sec_phy: Use second HSPHY with USB2 core
+ * @bus_scale_table: parameters for bus bandwidth requirements
+ * @mhl_dev_name: MHL device name used to register with MHL driver.
+ * @log2_itc: value of 2^(log2_itc-1) will be used as the
+ *              interrupt threshold (ITC), when log2_itc is
+ *              between 1 to 7.
+ * @l1_supported: enable link power management support.
+ * @dpdm_pulldown_added: Indicates whether pull down resistors are
+ *		connected on data lines or not.
+ * @vddmin_gpio: dedictaed gpio in the platform that is used for
+ *		pullup the D+ line in case of bus suspend with
+ *		phy retention.
+ * @rw_during_lpm_workaround: Determines whether remote-wakeup
+ *		during low-power mode workaround will be
+ *		applied.
+ * @enable_ahb2ahb_bypass: Indicates whether enable AHB2AHB BYPASS
+ *		mode with controller in device mode.
+ * @bool disable_retention_with_vdd_min: Indicates whether to enable
+		allowing VDDmin without putting PHY into retention.
+ * @usb_id_gpio: Gpio used for USB ID detection.
+ * @hub_reset_gpio: Gpio used for hub reset.
+ * @switch_sel_gpio: Gpio used for controlling switch that
+		routing D+/D- from the USB HUB to the USB jack type B
+		for peripheral mode.
+ * @bool phy_dvdd_always_on: PHY DVDD is supplied by always on PMIC LDO.
+ * @bool emulation: Indicates whether we are running on emulation platform.
+ * @bool enable_streaming: Indicates whether streaming to be enabled by default.
+ * @bool enable_axi_prefetch: Indicates whether AXI Prefetch interface is used
+		for improving data performance.
+ */
+struct msm_otg_platform_data {
+	int *phy_init_seq;
+	int (*vbus_power)(bool on);
+	unsigned power_budget;
+	enum usb_mode_type mode;
+	enum otg_control_type otg_control;
+	enum usb_mode_type default_mode;
+	enum msm_usb_phy_type phy_type;
+	int pmic_id_irq;
+	unsigned int mpm_otgsessvld_int;
+	unsigned int mpm_dpshv_int;
+	unsigned int mpm_dmshv_int;
+	bool mhl_enable;
+	bool disable_reset_on_disconnect;
+	bool pnoc_errata_fix;
+	bool enable_lpm_on_dev_suspend;
+	bool core_clk_always_on_workaround;
+	bool delay_lpm_on_disconnect;
+	bool dp_manual_pullup;
+	bool enable_sec_phy;
+	struct msm_bus_scale_pdata *bus_scale_table;
+	const char *mhl_dev_name;
+	int log2_itc;
+	bool l1_supported;
+	bool dpdm_pulldown_added;
+	int vddmin_gpio;
+	bool rw_during_lpm_workaround;
+	bool enable_ahb2ahb_bypass;
+	bool disable_retention_with_vdd_min;
+	int usb_id_gpio;
+	int hub_reset_gpio;
+	int switch_sel_gpio;
+	int usbid_switch;
+	bool phy_dvdd_always_on;
+	bool emulation;
+	bool enable_streaming;
+	bool enable_axi_prefetch;
+	struct clk *system_clk;
+	struct clk *pclk;
+};
+
+/* phy related flags */
+#define ENABLE_DP_MANUAL_PULLUP		BIT(0)
+#define ENABLE_SECONDARY_PHY		BIT(1)
+#define PHY_HOST_MODE			BIT(2)
+#define PHY_CHARGER_CONNECTED		BIT(3)
+#define PHY_VBUS_VALID_OVERRIDE		BIT(4)
+
+/* Timeout (in msec) values (min - max) associated with OTG timers */
+
+#define TA_WAIT_VRISE	100	/* ( - 100)  */
+#define TA_WAIT_VFALL	500	/* ( - 1000) */
+
+/*
+ * This option is set for embedded hosts or OTG devices in which leakage
+ * currents are very minimal.
+ */
+#ifdef CONFIG_USB_OTG
+#define TA_WAIT_BCON	30000	/* (1100 - 30000) */
+#else
+#define TA_WAIT_BCON	-1
+#endif
+
+#define TA_AIDL_BDIS	500	/* (200 - ) */
+#define TA_BIDL_ADIS	155	/* (155 - 200) */
+#define TB_SRP_FAIL	6000	/* (5000 - 6000) */
+#define TB_ASE0_BRST	200	/* (155 - ) */
+
+/* TB_SSEND_SRP and TB_SE0_SRP are combined */
+#define TB_SRP_INIT	2000	/* (1500 - ) */
+
+#define TA_TST_MAINT	10100	/* (9900 - 10100) */
+#define TB_TST_SRP	3000	/* ( - 5000) */
+#define TB_TST_CONFIG	300
+
+/* Timeout variables */
+
+#define A_WAIT_VRISE	0
+#define A_WAIT_VFALL	1
+#define A_WAIT_BCON	2
+#define A_AIDL_BDIS	3
+#define A_BIDL_ADIS	4
+#define B_SRP_FAIL	5
+#define B_ASE0_BRST	6
+#define A_TST_MAINT	7
+#define B_TST_SRP	8
+#define B_TST_CONFIG	9
+
 #define USB_NUM_BUS_CLOCKS      3
 
 /**

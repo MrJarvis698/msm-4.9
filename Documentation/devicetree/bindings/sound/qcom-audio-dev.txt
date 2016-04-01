@@ -418,39 +418,14 @@ Required properties:
 Required properties:
 
  - compatible :                            "qcom,msm-cdc-pinctrl"
+ - compatible :                            "qcom,wcd-gpio-ctrl"
 
  - qcom,cdc-rst-n-gpio :                   TLMM GPIO number
 
  - pinctrl-names:                          Pinctrl state names for each pin
                                            group configuration.
  - pinctrl-x:                              Defines pinctrl state for each pin
-                                           group.
-* msm_cdc_pinctrl
-
-Required properties:
-
- - compatible :                            "qcom,msm-cdc-pinctrl"
-
- - pinctrl-names:                          Pinctrl state names for each pin
-                                           group configuration.
- - pinctrl-x:                              Defines pinctrl state for each pin
-                                           group.
-
-* wcd_dsp_glink
-
-Required properties:
-
- - compatible :                            "qcom,wcd-dsp-glink"
- - qcom,msm-codec-glink-edge:              Name of the glink edge which is used
-                                           for IPC.
-                                           If no name is set, it defaults to "wdsp"
-
-* msm_ext_disp_audio_codec_rx
-
-Required properties:
-
- - compatible :                            "qcom,msm-ext-disp-audio-codec-rx"
-
+                                           group
 Example:
 
 	qcom,msm-pcm {
@@ -718,29 +693,12 @@ Example:
 	};
 
 	wcd_gpio_ctrl {
-		compatible = "qcom,msm-cdc-pinctrl";
+		compatible = "qcom,wcd-gpio-ctrl";
 		qcom,cdc-rst-n-gpio = <&tlmm 64 0>;
 		pinctrl-names = "aud_active", "aud_sleep";
 		pinctrl-0 = <&cdc_reset_active>;
 		pinctrl-1 = <&cdc_reset_sleep>;
 	};
-
-	msm_cdc_pinctrl {
-		compatible = "qcom,msm-cdc-pinctrl";
-		pinctrl-names = "aud_active", "aud_sleep";
-		pinctrl-0 = <&cdc_reset_active>;
-		pinctrl-1 = <&cdc_reset_sleep>;
-	};
-
-	wcd_dsp_glink {
-		compatible = "qcom,wcd-dsp-glink";
-		qcom,msm-codec-glink-edge = "bg";
-	};
-
-	msm_ext_disp_audio_codec_rx {
-		compatible = "qcom,msm-ext-disp-audio-codec-rx";
-	};
-
 
 * MSM8916 ASoC Machine driver
 

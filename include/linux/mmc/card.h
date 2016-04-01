@@ -339,7 +339,6 @@ enum mmc_pon_type {
 	MMC_LONG_PON = 1,
 	MMC_SHRT_PON,
 };
-
 #define MMC_QUIRK_CMDQ_DELAY_BEFORE_DCMD 6 /* microseconds */
 
 /*
@@ -388,15 +387,16 @@ struct mmc_card {
 #define MMC_QUIRK_TRIM_BROKEN	(1<<12)		/* Skip trim */
 #define MMC_QUIRK_BROKEN_HPI	(1<<13)		/* Disable broken HPI support */
 						/* byte mode */
-#define MMC_QUIRK_INAND_DATA_TIMEOUT  (1<<14)   /* For incorrect data timeout */
-#define MMC_QUIRK_CACHE_DISABLE (1 << 15)	/* prevent cache enable */
-#define MMC_QUIRK_QCA6574_SETTINGS (1 << 16)	/* QCA6574 card settings*/
-#define MMC_QUIRK_QCA9377_SETTINGS (1 << 17)	/* QCA9377 card settings*/
-
-
+#define MMC_QUIRK_INAND_DATA_TIMEOUT  (1<<11)   /* For incorrect data timeout */
+/* To avoid eMMC device getting broken permanently due to HPI feature */
+#define MMC_QUIRK_BROKEN_HPI (1 << 12)
+ /* Skip data-timeout advertised by card */
+#define MMC_QUIRK_BROKEN_DATA_TIMEOUT	(1<<13)
+#define MMC_QUIRK_CACHE_DISABLE (1 << 14)       /* prevent cache enable */
 /* Make sure CMDQ is empty before queuing DCMD */
-#define MMC_QUIRK_CMDQ_EMPTY_BEFORE_DCMD (1 << 18)
-#define MMC_QUIRK_QCA9379_SETTINGS (1 << 19)    /* QCA9379 card settings*/
+#define MMC_QUIRK_CMDQ_EMPTY_BEFORE_DCMD (1 << 15)
+
+
 
 
 	unsigned int		erase_size;	/* erase size in sectors */
